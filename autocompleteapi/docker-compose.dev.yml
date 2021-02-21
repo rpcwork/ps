@@ -1,0 +1,27 @@
+version: '3.3'
+
+networks:
+    default:
+        external:
+            name: autocompletees_default
+
+services:
+    autocompleteapi_php:
+        container_name: dev_api_php
+        build: ./image/php/
+        volumes:
+        - ./www/lumen/:/var/www/html
+        ports:
+        - '9000:9000'
+        
+
+    autocompleteapi_nginx:
+        container_name: dev_api_nginx
+        image: nginx:latest
+        volumes:
+            - ./image/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+        - '8081:81'
+        links:
+        - autocompleteapi_php
+        

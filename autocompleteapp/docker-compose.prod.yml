@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  autocompleteapp:
+    container_name: prod
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - '80:80'

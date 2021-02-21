@@ -1,0 +1,19 @@
+# using Docker multistage builds
+FROM node:lts-alpine3.13 as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json /app/package.json
+COPY vue.config.js /app/vue.config.js
+RUN npm install --silent
+RUN npm install --save vue@next @vue/cli@4.5.11 primevue@^3.2.1 primeicons axios primeflex
+COPY . /app
+RUN npm run build -- --mode production
+
+# production environment
+FROM nginx:alpine as production-build
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /app/dist /usr/share/nginx/html
+#RUN rm /etc/nginx/conf.d/default.conf
+COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

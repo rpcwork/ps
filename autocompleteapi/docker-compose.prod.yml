@@ -1,0 +1,23 @@
+version: '3.3'
+
+networks:
+    default:
+        external:
+            name: autocompletees_default
+
+services:
+  autocompleteapi_php:
+    build: 
+      context: .
+      dockerfile: Dockerfile-prod-php
+    ports:
+      - '9000:9000'
+
+  autocompleteapi_nginx:  
+    build: 
+      context: .
+      dockerfile: Dockerfile-prod-nginx
+    ports:
+      - '8081:81'
+    links:
+        - autocompleteapi_php

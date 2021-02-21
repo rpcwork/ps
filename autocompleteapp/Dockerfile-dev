@@ -1,0 +1,24 @@
+# base image
+FROM node:lts-alpine3.13
+
+# set working directory
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install and cache app dependencies  
+# COPY package*.json ./
+COPY package.json /app/package.json
+COPY vue.config.js /app/vue.config.js
+RUN npm install
+RUN npm install --save vue@next @vue/cli@4.5.11 primevue@^3.2.1 primeicons axios primeflex
+#RUN npm install vue@next
+#RUN npm install @vue/cli@4.5.11 -g
+#RUN npm install primevue@^3.2.1 --save
+#UN npm install primeicons --save
+#RUN npm install axios --save
+#RUN npm install primeflex --save
+
+# start app
+CMD ["npm", "run", "serve"]
